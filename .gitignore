@@ -1,0 +1,8 @@
+node_modules
+
+# vscode plugin local-history
+.history
+
+package-lock.json
+
+package.json
