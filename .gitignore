@@ -1,8 +1,16 @@
-node_modules
+/node_modules
+
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
 
 # vscode plugin local-history
 .history
 
-package-lock.json
+# local env files
+.env
 
-package.json
