@@ -1,12 +1,11 @@
-/node_modules
-
+node_modules
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
-/build
+build
 
 # vscode plugin local-history
 .history

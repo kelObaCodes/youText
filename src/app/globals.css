@@ -29,8 +29,28 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background-color: #EAF6F6;
+  background-color: rgb(249, 251, 252);
+  animation: colorChange 160s infinite;
+  transition: 2s;
 }
+
+
+@keyframes colorChange {
+  0% {
+    background-color: #EAF6F6;
+  }
+  50% {
+    background-color: #EAF6F6;;
+  }
+  50.1% {
+    background-color:  rgb(249, 251, 252);
+  }
+  100% {
+    background-color:  rgb(249, 251, 252);
+  }
+}
+
+
 
 a {
   color: inherit;
@@ -43,6 +63,34 @@ p, h1, h2, button, span {
 
 p {
   font-weight: 300;
+  line-height: 1.7;
+
+}
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(200%);
+  }
+  
+}
+.time-tag,  .time-icon {
+  position: absolute;
+  opacity: .2;
+  right: 89px;
+  top: 30px;
+}
+
+.time-icon {
+  right: 159px;
+  font-size: 18px !important;
+}
+
+.image-bg {
+  font-size: 900px !important;
+  position: absolute;
+  opacity: .02;
+  right: -120px;
+  bottom: 12px;
 }
 
 .welcome-cover {
@@ -63,7 +111,7 @@ p {
 .welcome-header span {
   font-size: 60px;
   animation: jello; /* referring directly to the animation's @keyframe declaration */
-  animation-duration: 4s
+  animation-duration: 4s;
 }
 .welcome-header ~ p {
   margin: 20px 0;
@@ -74,6 +122,7 @@ letter-spacing: .5px;
 
 .create-btn {
   height: 40px;
+  margin-bottom: 30px;
   border-radius: 5px;
   padding: 10px;
   background: black;
@@ -161,7 +210,7 @@ border-radius: 5px;
 }
 
 .translate-youText {
-  height: 250px;
+  height: 350px;
   top: 20px;
   overflow: scroll;
 }
@@ -169,6 +218,80 @@ border-radius: 5px;
 
 .emoji-cover {
   position: absolute;
+  left: 140px;
+  bottom: 217px;
 }
 
 
+.translate-cover {
+  position: relative;
+  bottom: 300px;
+  max-width: 500px;
+}
+
+.text-area-div span {
+  position: absolute;
+  right: 3px;
+  top: 32px;
+}
+
+.saved-texts {
+  height: 200px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 #0000001a;
+  cursor: pointer;
+  padding: 10px;
+  position: relative;
+  border: 1px solid #f0f2f3;;
+  overflow: auto;
+  border-radius: 16px;
+  -webkit-transition: all 200ms ease-in;
+  -webkit-transform: scale(1); 
+  -ms-transition: all 200ms ease-in;
+  -ms-transform: scale(1); 
+  -moz-transition: all 200ms ease-in;
+  -moz-transform: scale(1);
+  transition: all .4s ease-in;
+  transform: scale(1);  
+  z-index: 2;
+}
+
+.saved-texts:hover {
+
+box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    z-index: 2;
+    -webkit-transition: all 200ms ease-in;
+    -webkit-transform: scale(1.1);
+    -ms-transition: all 200ms ease-in;
+    -ms-transform: scale(1.1);   
+    -moz-transition: all 200ms ease-in;
+    -moz-transform: scale(1.1);
+    transition: all .4s ease-in;
+    transform: scale(1.1);
+}
+
+.text-time {
+  position: absolute;
+  right: 1px;
+  font-size: 12px;
+  opacity: .7;
+}
+
+.stroke-line {
+  height: 50px;
+  border: 1px solid black;
+  width: 2px;
+  margin: 0 auto;
+  opacity: .1;
+}
+
+.saved-texts img {
+
+  position: absolute;
+  right: 0;
+bottom: 0;
+}
+
+.relative-pos {
+  position: relative;
+}

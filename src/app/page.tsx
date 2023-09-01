@@ -1,10 +1,9 @@
-import Image from 'next/image'
-import styles from './page.module.css'
-import WelcomeView from '@/components/welcome'
+import styles from "./page.module.css";
+import ParentContainer from "@/components/parentContainer";
 export default function Home() {
-  return (
-    <main className={styles.main}>
-     <WelcomeView/>
-    </main>
-  )
+    return (
+        <main className={styles.main}>
+            <ParentContainer />
+        </main>
+    );
 }

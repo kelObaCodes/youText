@@ -1,25 +1,25 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
-import ToolTip from "./tooltip";
-import { youTextDataExplainer } from "./../helper";
-import EmojiPicker from "emoji-picker-react";
+import Texts from "./texts";
+import SaveTexts from "./saveTexts";
+import { getCurrentTimeAndDate } from "./../helper";
 
 export default function WelcomeView() {
-    const [text, setText] = useState<string>("");
-    const [translation, setTranslation] = useState<boolean>(false);
-    const [showEmoji, setShowEmoji] = useState<boolean>(false);
-
-    const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        const inputValue = event.target.value;
-        const formattedText = inputValue.replace(/\[(.*?)\]/g, "[<b>$1</b>]");
-
-        setText(formattedText);
-    };
+    const formattedTime: string = getCurrentTimeAndDate("time");
 
     return (
         <>
             <div className="welcome-cover">
+                <div>
+                    <p className="time-tag">{formattedTime}</p>
+                    <span className="material-symbols-sharp time-icon">
+                        timer
+                    </span>
+                    <span className="material-symbols-sharp image-bg">
+                        edit_off
+                    </span>
+                </div>
+
                 <h1 className="welcome-header">
                     Hello{" "}
                     <span className="material-symbols-outlined animate__animated  animate__jello">
@@ -40,35 +40,8 @@ export default function WelcomeView() {
                         edit
                     </span>
                 </button>
-
-                {<ToolTip toolTipData={youTextDataExplainer()} />}
-
-                <div className="text-area-div">
-                    <textarea
-                        rows={15}
-                        onChange={handleChange}
-                        placeholder="Type your text here..."
-                        onMouseEnter={() => setTranslation(true)}
-                        onBlur={() => setTranslation(!translation)}
-                    ></textarea>
-
-                    {translation && (
-                        <p
-                            className="translate-youText"
-                            dangerouslySetInnerHTML={{ __html: text }}
-                        />
-                    )}
-                </div>
-                <div className="emoji-cover">
-                    {showEmoji && <EmojiPicker />}
-                </div>
-
-                <button className="create-btn cursor-pointer">
-                    <span className="button-text">Save you</span>
-                    <span className="material-symbols-sharp symbol-icon">
-                        control_point_duplicate
-                    </span>
-                </button>
+                <SaveTexts />
+                <Texts />
             </div>
         </>
     );
