@@ -2,33 +2,40 @@
 
 import { useState, useEffect, ChangeEvent, useRef } from "react";
 import ToolTip from "./tooltip";
-import {
-    youTextDataExplainer,
-    getCurrentTimeAndDate,
-} from "./../helper";
+import { youTextDataExplainer, getCurrentTimeAndDate, extractWordsInBrackets } from "./../helper";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import Image from "next/image";
 import emojiPic from "../images/emoji.png";
 
-export default function WelcomeView() {
+type Props = {
+    saveUserText?: (user: string) => void;
+    setStepLevel?: (text: string) => void;
+};
+
+export default function SaveTexts({ saveUserText, setStepLevel }: Props) {
     const [text, setText] = useState<string>("");
+    const [textHeading, setTextHeading] = useState<string>("");
     const [translation, setTranslation] = useState<boolean>(false);
     const [showEmoji, setShowEmoji] = useState<boolean>(false);
     const [textArray, setTextArray] = useState<
-        { text: string; time: string; id: number }[]
+        { text: string; time: string; id: number, header: string }[]
     >([]);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-    const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const handleChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const {name, value} = event.target;
         const inputValue = event.target.value;
-        const formattedText = inputValue.replace(/\[(.*?)\]/g, "[<b>$1</b>]");
+        // const formattedText = inputValue.replace(/\[(.*?)\]/g, "[<b>$1</b>]");
 
-        setText(formattedText);
+        if(name === 'header') {
+            setTextHeading(value)
+        } else {
+            setText(inputValue);
+        }
     };
 
     function onClickEmoji(emojiData: EmojiClickData, event: MouseEvent) {
-        console.log(emojiData);
         const textEmoji = text + emojiData.emoji;
         setText(textEmoji);
     }
@@ -41,58 +48,80 @@ export default function WelcomeView() {
     };
 
     useEffect(() => {
+        saveUserText?.(text);
+    }, [text]);
+
+    useEffect(() => {
         const storedTextArray = JSON.parse(
             localStorage.getItem("textArray") || "[]"
         );
         setTextArray(storedTextArray);
     }, []);
-    useEffect(() => {
-        if (textArray.length > 0)
-            localStorage.setItem("textArray", JSON.stringify(textArray));
-    }, [textArray.length]);
+
 
     const handleAddText = () => {
         const currentTime = getCurrentTimeAndDate("both");
-        setTextArray([
-            { text: text, time: currentTime, id: Math.random() },
+const dynamicWords = extractWordsInBrackets(text)
+const dynamicHeader = extractWordsInBrackets(textHeading)
+
+        const newArray = [
+            { text: text, time: currentTime, id: Math.random(), header: textHeading,
+            dynamicWordsForText:[...dynamicWords],
+            dynamicWordsForHeading:[...dynamicHeader]
+            },
             ...textArray,
-        ]);
+        ]
+        setTextArray(newArray);
+        localStorage.setItem("textArray", JSON.stringify(newArray));
+
         setText("");
+        setTextHeading("")
+        setStepLevel?.('viewTexts')
     };
 
     return (
         <>
-            <div>
+            <div className="welcome-cover"
+             onMouseEnter={() => setTranslation(true)}
 
+            >
                 {<ToolTip toolTipData={youTextDataExplainer()} />}
 
-                <div className="text-area-div">
-                    <span
-                        className="material-symbols-sharp cursor-pointer"
-                        onClick={() => {
-                            handleCopyClick();
-                            setTranslation(true);
-                        }}
-                    >
-                        content_copy
-                    </span>
-                    <textarea
-                        value={text}
-                        rows={15}
+                <div className="text-area-div" >
+                    <input
+                        type="text"
+                        name="header"
+                        value={textHeading}
                         onChange={handleChange}
-                        ref={textAreaRef}
-                        placeholder="Type your text here..."
+                        placeholder="Text heading"
                         onMouseEnter={() => setTranslation(true)}
-                        onBlur={() => {
-                            setShowEmoji(false);
-                            setTranslation(!translation);
-                        }}
-                    ></textarea>
+                        onClick={() => setTranslation(true)}
+                    />
+                    <div>
+                        <span
+                            className="material-symbols-sharp cursor-pointer"
+                            onClick={() => {
+                                handleCopyClick();
+                                setTranslation(true);
+                            }}
+                        >
+                            content_copy
+                        </span>
+                        <textarea
+                            value={text}
+                            rows={15}
+                            name="content"
+                            onChange={handleChange}
+                            ref={textAreaRef}
+                            placeholder="Type your text here..."
+                          
+                        ></textarea>
+                    </div>
 
                     {translation && (
                         <p
                             className="translate-youText animate__animated  animate__fadeIn"
-                            dangerouslySetInnerHTML={{ __html: text }}
+                            dangerouslySetInnerHTML={{ __html: `${'<h3>'+textHeading+'</h3>'}`+ text }}
                             style={{ whiteSpace: "pre-wrap" }}
                         />
                     )}
@@ -112,8 +141,12 @@ export default function WelcomeView() {
                     />
                 </div>
 
-                <div className="emoji-cover">
-                    {showEmoji && <EmojiPicker onEmojiClick={onClickEmoji} />}
+                <div className="emoji-cover" 
+                onMouseEnter={() => setTranslation(true)}
+                >
+                    {showEmoji && <EmojiPicker 
+                    
+                    onEmojiClick={onClickEmoji} />}
                 </div>
 
                 <button

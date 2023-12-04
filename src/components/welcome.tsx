@@ -1,24 +1,12 @@
 "use client";
 
-import Texts from "./texts";
-import SaveTexts from "./saveTexts";
-import { getCurrentTimeAndDate } from "./../helper";
 
 export default function WelcomeView() {
-    const formattedTime: string = getCurrentTimeAndDate("time");
 
     return (
         <>
             <div className="welcome-cover">
-                <div>
-                    <p className="time-tag">{formattedTime}</p>
-                    <span className="material-symbols-sharp time-icon">
-                        timer
-                    </span>
-                    <span className="material-symbols-sharp image-bg">
-                        edit_off
-                    </span>
-                </div>
+           
 
                 <h1 className="welcome-header">
                     Hello{" "}
@@ -40,8 +28,7 @@ export default function WelcomeView() {
                         edit
                     </span>
                 </button>
-                <SaveTexts />
-                <Texts />
+             
             </div>
         </>
     );

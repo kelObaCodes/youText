@@ -1,14 +1,16 @@
 export const youTextDataExplainer = () => {
     return (
         <>
-            how to save your youText
+            How to save your youText
             <span className="material-symbols-sharp cursor-pointer">info</span>
             <div className="tooltiptext">
                 <p>For your dynamic youText, you can save it like so</p>
                 <br></br>
+                
+                    <h4><b>Job application</b></h4>
                 <p>
-                    <span className="material-symbols-sharp">format_quote</span>
-                    I have been trying to reach out to <b>[company_name]. </b>
+              <span className="material-symbols-sharp">format_quote</span>
+                   I have been trying to reach out to <b>[company_name]. </b>
                     My name is <b>[myname]</b> and i am a very skilled{" "}
                     <b>[profession] </b> and i have so many things that i would
                     be interested in managing for <b> [ceo_name] </b> and i have
@@ -35,25 +37,31 @@ export const handleCopyClick = (content: any) => {
 };
 
 export const sortArrayByRecent = (array: any) => {
-    return array
-        .slice() // Create a shallow copy of the array
-        .sort((a: any, b: any) => b.time.localeCompare(a.time));
+    return array.sort((a: any, b: any) => {
+        const timeA = new Date(a.time);
+        const timeB = new Date(b.time);
+        return timeB.getTime() - timeA.getTime();
+    });
 };
-
 
 export const getCurrentTimeAndDate = (type: string): string => {
     const now = new Date();
-    const dateOptions: Intl.DateTimeFormatOptions = {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-    };
+    const monthAbbreviation = new Intl.DateTimeFormat("en-US", {
+        month: "short",
+    }).format(now);
+    const day = new Intl.DateTimeFormat("en-US", { day: "numeric" }).format(
+        now
+    );
+    const year = new Intl.DateTimeFormat("en-US", { year: "numeric" }).format(
+        now
+    );
+
     const timeOptions: Intl.DateTimeFormatOptions = {
         hour: "numeric",
         minute: "numeric",
         hour12: true,
     };
-    const formattedDate = now.toLocaleString("en-US", dateOptions);
+    const formattedDate = `${monthAbbreviation} ${day}, ${year}`;
     const formattedTime = now.toLocaleString("en-US", timeOptions);
 
     if (type === "date") {
@@ -62,5 +70,18 @@ export const getCurrentTimeAndDate = (type: string): string => {
         return formattedTime;
     } else {
         return `${formattedDate} ${formattedTime}`;
+    }
+};
+
+export const extractWordsInBrackets = (sentence: string) => {
+    const bracketContents = sentence.match(/\[([^[\]]*)\]/g);
+
+    if (bracketContents) {
+        const wordsArray = bracketContents.map((content) =>
+            content.replace(/\[|\]/g, "").trim()
+        );
+        return wordsArray;
+    } else {
+        return [];
     }
 };
