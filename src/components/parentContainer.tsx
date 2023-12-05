@@ -8,7 +8,7 @@ import { getCurrentTimeAndDate } from "./../helper";
 
 export default function ParentContainer() {
     const [text, setText] = useState<string>("");
-    const [step, setStep] = useState<number | string>("form");
+    const [step, setStep] = useState<number | string>("viewTexts");
     // const [step, setStep] = useState<number | string>("form");
     const [textArray, setTextArray] = useState<
         { text: string; time: string; id: number }[]
@@ -30,6 +30,7 @@ export default function ParentContainer() {
 
     return (
         <>
+       
             <div>
                 {
                     step === "viewTexts" && (
@@ -60,6 +61,8 @@ export default function ParentContainer() {
                         setStepLevel={setStepLevel}
                     />
                 )}
+
+               
             </div>
         </>
     );

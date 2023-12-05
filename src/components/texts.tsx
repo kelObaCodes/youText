@@ -8,7 +8,6 @@ type Props = {
 };
 
 export default function Texts({ texts }: Props) {
-    
     const [currentId, setCurrentId] = useState<number>(0);
     const [currentText, setCurrentText] = useState<{
         text: string;
@@ -42,6 +41,15 @@ export default function Texts({ texts }: Props) {
         }
     };
 
+    const copyToClipboard = async () => {
+        try {
+            currentText?.text && await navigator.clipboard.writeText(currentText?.text);
+        //   setIsCopied(true);
+        } catch (err) {
+          console.error('Unable to copy to clipboard', err);
+        }
+      };
+
     return (
         <>
             <div className="preview-cover">
@@ -51,30 +59,16 @@ export default function Texts({ texts }: Props) {
                         sortArrayByRecent(textArray).map(
                             (data: any, index: number) => (
                                 <div key={data.id}>
-                                  <div
-                            
-                                    className="scroll-element"
-                                    ref={(element) =>
-                                        (divRefs.current[index] = element)
-                                    }
-                                    ></div>
-                                <div
-                                    key={data.id}
-                                    onClick={() => {
-                                        scrollToDiv(index);
-                                    }}
-                                  
-                                >
-                                  
                                     <div
-                                        className={`${"saved-texts"} ${
-                                            data.id === currentId
-                                                ? "active-text"
-                                                : ""
-                                        }`}
-                                        onClick={()=> {
-                                            setCurrentText(data);
-                                            setCurrentId(data.id);
+                                        className="scroll-element"
+                                        ref={(element) =>
+                                            (divRefs.current[index] = element)
+                                        }
+                                    ></div>
+                                    <div
+                                        key={data.id}
+                                        onClick={() => {
+                                            scrollToDiv(index);
                                         }}
                                     >
                                         <div className="relative-pos">
@@ -82,32 +76,42 @@ export default function Texts({ texts }: Props) {
                                                 {data.time}
                                             </p>
                                         </div>
-                                        <div>
-                                            <h3>
-                                                {" "}
-                                                {data.text
-                                                    .slice(0, 6)
-                                                    .toLowerCase()}
-                                            </h3>
+                                        <div
+                                            className={`${"saved-texts"} ${
+                                                data.id === currentId
+                                                    ? "active-text"
+                                                    : ""
+                                            }`}
+                                            onClick={() => {
+                                                setCurrentText(data);
+                                                setCurrentId(data.id);
+                                            }}
+                                        >
+                                            <div>
+                                                <h3>
+                                                    {" "}
+                                                    {data.text
+                                                        .slice(0, 6)
+                                                        .toLowerCase()}
+                                                </h3>
 
-                                            <p
-                                                style={{
-                                                    whiteSpace: "pre-wrap",
-                                                }}
-                                            >
-                                                {data.text}
-                                            </p>
+                                                <p
+                                                    style={{
+                                                        whiteSpace: "pre-wrap",
+                                                    }}
+                                                >
+                                                    {data.text}
+                                                </p>
+                                            </div>
                                         </div>
+                                        <div className="stroke-line"></div>
                                     </div>
-                                    <div className="stroke-line"></div>
                                 </div>
-                                </div>
-
                             )
                         )}
                 </div>
                 <div className="text-details">
-                    <h2>{currentText?.header}</h2>
+                    <h2 className="mb-10">{currentText?.header}</h2>
                     <p style={{ whiteSpace: "pre-wrap" }}>
                         {currentText?.text}
                     </p>
@@ -115,49 +119,67 @@ export default function Texts({ texts }: Props) {
                     <p className="time-block">{currentText?.time}</p>
 
                     <div className="action-div">
-                        <div className="action">
-                            <span>copy text </span>
-                            <span className="material-symbols-sharp ml-20">
-                                east
+                    <div className="action">
+                            <span className="material-symbols-outlined">
+                                chat_add_on
+                            </span>
+                        </div>
+                        <div className="action" onClick={copyToClipboard}>
+                            {/* <span>copy text </span> */}
+                            <span className="material-symbols-outlined">
+                                copy_all
                             </span>
                         </div>
                         <div className="action">
+                            {/* <span>copy text </span> */}
+                            <span className="material-symbols-outlined">
+                                delete
+                            </span>
+                        </div>
+                        
+                        {/* <div className="action">
+                            <span>copy text </span>
+                            <span className="material-symbols-outlined">
+                                contract_edit
+                            </span>
+                        </div> */}
+                        {/* <div className="action">
                             <span>Add dynamic data </span>
                             <span className="material-symbols-sharp ml-20">
                                 east
                             </span>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className="dynamic-content">
-<div>
-    <p>
-        <b>
-            [dynamic text]
-            </b>
-    </p>
-    <input
-                        type="text"
-                        name="header"
-                        value={""}
-                        // onChange={handleChange}
-                        placeholder="Text heading"
-                        // onMouseEnter={() => setTranslation(true)}
-                        // onClick={() => setTranslation(true)}
-                    />
-</div>
-               
-                    <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing
-                        elit. Debitis cumque, quibusdam aut incidunt doloremque
-                        officia voluptatem vel molestiae dolor quasi. Nobis
-                        tenetur eos repellat aliquid dolores maxime tempora
-                        reprehenderit quisquam? Corrupti quis assumenda eos
-                        voluptatum rerum. Nesciunt, neque repellendus porro
-                        quidem in omnis, atque eius incidunt libero cum itaque.
-                        Veritatis excepturi eligendi impedit! Culpa ratione
-                        quia, illum in repellendus dolor.
-                    </p>
+                    <>
+                        {currentText?.dynamicWordsForText &&
+                            currentText?.dynamicWordsForText?.length > 0 && (
+                                <h3 className="mb-10">Dynamic Texts</h3>
+                            )}
+                        {currentText?.dynamicWordsForText?.map((data) => (
+                            <div>
+                                <p>
+                                    <b>[{data}]</b>
+                                </p>
+                                <input
+                                    type="text"
+                                    name={`${data}`}
+                                    value={""}
+                                    // onChange={handleChange}
+                                    placeholder={`${data} text`}
+                                    // onMouseEnter={() => setTranslation(true)}
+                                    // onClick={() => setTranslation(true)}
+                                />
+                            </div>
+                        ))}
+                        <button className="update-text">
+                            Update text
+                        </button>
+                    </>
+                </div>
+                <div className="notification-center">
+                    <div className="noty-box"></div>
                 </div>
             </div>
         </>
