@@ -73,15 +73,32 @@ export const getCurrentTimeAndDate = (type: string): string => {
     }
 };
 
-export const extractWordsInBrackets = (sentence: string) => {
-    const bracketContents = sentence.match(/\[([^[\]]*)\]/g);
+// export const extractWordsInBrackets = (sentence: string) => {
+//     const bracketContents = sentence.match(/\[([^[\]]*)\]/g);
 
-    if (bracketContents) {
-        const wordsArray = bracketContents.map((content) =>
-            content.replace(/\[|\]/g, "").trim()
-        );
-        return wordsArray;
-    } else {
-        return [];
+//     if (bracketContents) {
+//         const wordsArray = bracketContents.map((content) =>
+//             content.replace(/\[|\]/g, "").trim()
+//         );
+//         return wordsArray;
+//     } else {
+//         return [];
+//     }
+// };
+export const extractWordsInBrackets = (sentence: string) => {
+    const regex = /\[([^\]]+)\]/g;
+    const matches = sentence.match(regex) || '';
+    
+    const result = [];
+
+    for (const match of matches) {
+        const dynamicText = match.slice(1, -1); // Remove square brackets
+        const obj = {
+            dynamicText,
+            dynamicTextValue: ""
+        };
+        result.push(obj);
     }
-};
+
+    return result;
+}

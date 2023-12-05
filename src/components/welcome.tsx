@@ -1,7 +1,11 @@
 "use client";
 
 
-export default function WelcomeView() {
+type Props = {
+    setStepLevel?: (text: string) => void;
+}
+
+export default function WelcomeView({setStepLevel}:Props) {
 
     return (
         <>
@@ -22,7 +26,7 @@ export default function WelcomeView() {
                     some parts to be customizable, dynamic and other parts
                     resusable, youText gives you that.
                 </p>
-                <button className="create-btn cursor-pointer">
+                <button className="create-btn cursor-pointer" onClick={()=>setStepLevel?.('form')}>
                     <span className="button-text">Create your text</span>
                     <span className="material-symbols-outlined symbol-icon">
                         edit

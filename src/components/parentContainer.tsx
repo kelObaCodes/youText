@@ -3,7 +3,7 @@
 import { useState, useEffect, ChangeEvent, useRef } from "react";
 import Texts from "./texts";
 import SaveTexts from "./saveTexts";
-import Welcome from "./welcome";
+import WelcomeView from "./welcome";
 import { getCurrentTimeAndDate } from "./../helper";
 
 export default function ParentContainer() {
@@ -32,12 +32,11 @@ export default function ParentContainer() {
         <>
        
             <div>
-                {
-                    step === "viewTexts" && (
+                
+                {(step === "viewTexts") && (
                         <button className="add-you-text"
                         onClick={()=> setStep('form')}
                         >add youText</button>
-
                     )
                 }
                 <p className="time-tag">{formattedTime}</p>
@@ -48,20 +47,21 @@ export default function ParentContainer() {
             </div>
             <div>
                 {
-                textArray.length < 1 && (
-                    <Welcome />
+                textArray.length < 1 && step === "welcome" &&  (
+                    <WelcomeView 
+                    setStepLevel={setStepLevel}
+                    />
                 )
                }
 
-                {step === "viewTexts" && <Texts texts={text} />}
+                {(textArray.length > 0 && step === "viewTexts")  && <Texts texts={text} />}
 
-                {step === "form" && textArray.length > 0 && (
+                {(step === "form") && (
                     <SaveTexts
                         saveUserText={saveUserText}
                         setStepLevel={setStepLevel}
                     />
                 )}
-
                
             </div>
         </>

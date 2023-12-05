@@ -266,7 +266,7 @@ border-radius: 5px;
   z-index: 2;
   margin: 0 auto;
 text-overflow: ellipsis;
-
+font-size: 12px;
 }
 
 .saved-texts:hover {

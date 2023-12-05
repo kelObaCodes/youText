@@ -2,7 +2,11 @@
 
 import { useState, useEffect, ChangeEvent, useRef } from "react";
 import ToolTip from "./tooltip";
-import { youTextDataExplainer, getCurrentTimeAndDate, extractWordsInBrackets } from "./../helper";
+import {
+    youTextDataExplainer,
+    getCurrentTimeAndDate,
+    extractWordsInBrackets,
+} from "./../helper";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import Image from "next/image";
 import emojiPic from "../images/emoji.png";
@@ -18,18 +22,20 @@ export default function SaveTexts({ saveUserText, setStepLevel }: Props) {
     const [translation, setTranslation] = useState<boolean>(false);
     const [showEmoji, setShowEmoji] = useState<boolean>(false);
     const [textArray, setTextArray] = useState<
-        { text: string; time: string; id: number, header: string }[]
+        { text: string; time: string; id: number; header: string }[]
     >([]);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-    const handleChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        const {name, value} = event.target;
+    const handleChange = (
+        event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    ) => {
+        const { name, value } = event.target;
         const inputValue = event.target.value;
         // const formattedText = inputValue.replace(/\[(.*?)\]/g, "[<b>$1</b>]");
 
-        if(name === 'header') {
-            setTextHeading(value)
+        if (name === "header") {
+            setTextHeading(value);
         } else {
             setText(inputValue);
         }
@@ -58,36 +64,42 @@ export default function SaveTexts({ saveUserText, setStepLevel }: Props) {
         setTextArray(storedTextArray);
     }, []);
 
-
     const handleAddText = () => {
         const currentTime = getCurrentTimeAndDate("both");
-const dynamicWords = extractWordsInBrackets(text)
-const dynamicHeader = extractWordsInBrackets(textHeading)
+        const dynamicWords = extractWordsInBrackets(text);
+        const dynamicHeader = extractWordsInBrackets(textHeading);
 
         const newArray = [
-            { text: text, time: currentTime, id: Math.random(), header: textHeading,
-            dynamicWordsForText:[...dynamicWords],
-            dynamicWordsForHeading:[...dynamicHeader]
+            {
+                text: text,
+                time: currentTime,
+                id: Math.random(),
+                header: textHeading,
+                dynamicWordsForText: [...dynamicWords],
+                dynamicWordsForHeading: [...dynamicHeader],
             },
             ...textArray,
-        ]
+        ];
         setTextArray(newArray);
         localStorage.setItem("textArray", JSON.stringify(newArray));
 
         setText("");
-        setTextHeading("")
-        setStepLevel?.('viewTexts')
+        setTextHeading("");
+        setStepLevel?.("viewTexts");
     };
 
     return (
         <>
-            <div className="welcome-cover"
-             onMouseEnter={() => setTranslation(true)}
-
+            <div
+                className="welcome-cover"
+                onMouseEnter={() => setTranslation(true)}
             >
+                 {/* <div className="notification-center">
+                    <div className="noty-box"></div>
+                </div> */}
                 {<ToolTip toolTipData={youTextDataExplainer()} />}
 
-                <div className="text-area-div" >
+                <div className="text-area-div">
                     <input
                         type="text"
                         name="header"
@@ -114,14 +126,16 @@ const dynamicHeader = extractWordsInBrackets(textHeading)
                             onChange={handleChange}
                             ref={textAreaRef}
                             placeholder="Type your text here..."
-                          
                         ></textarea>
                     </div>
 
                     {translation && (
                         <p
                             className="translate-youText animate__animated  animate__fadeIn"
-                            dangerouslySetInnerHTML={{ __html: `${'<h3>'+textHeading+'</h3>'}`+ text }}
+                            dangerouslySetInnerHTML={{
+                                __html:
+                                    `${"<h3>" + textHeading + "</h3>"}` + text,
+                            }}
                             style={{ whiteSpace: "pre-wrap" }}
                         />
                     )}
@@ -141,18 +155,16 @@ const dynamicHeader = extractWordsInBrackets(textHeading)
                     />
                 </div>
 
-                <div className="emoji-cover" 
-                onMouseEnter={() => setTranslation(true)}
+                <div
+                    className="emoji-cover"
+                    onMouseEnter={() => setTranslation(true)}
                 >
-                    {showEmoji && <EmojiPicker 
-                    
-                    onEmojiClick={onClickEmoji} />}
+                    { showEmoji && <EmojiPicker onEmojiClick={onClickEmoji} /> }
                 </div>
 
                 <button
                     className="create-btn cursor-pointer"
-                    onClick={() => handleAddText()}
-                >
+                    onClick={() => handleAddText()}>
                     <span className="button-text">Save you</span>
                     <span className="material-symbols-sharp symbol-icon">
                         control_point_duplicate

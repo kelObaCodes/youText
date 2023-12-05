@@ -15,7 +15,10 @@ export default function Texts({ texts }: Props) {
         id: number;
         active: boolean;
         header: string;
-        dynamicWordsForText: string[];
+        dynamicWordsForText: [{
+            dynamicText:string,
+            dynamicTextValue: string
+        }];
         dynamicWordsForHeading: string[];
     }>();
     const [textArray, setTextArray] = useState<
@@ -90,9 +93,8 @@ export default function Texts({ texts }: Props) {
                                             <div>
                                                 <h3>
                                                     {" "}
-                                                    {data.text
-                                                        .slice(0, 6)
-                                                        .toLowerCase()}
+                                                    {data.header
+                                                       }
                                                 </h3>
 
                                                 <p
@@ -160,14 +162,14 @@ export default function Texts({ texts }: Props) {
                         {currentText?.dynamicWordsForText?.map((data) => (
                             <div>
                                 <p>
-                                    <b>[{data}]</b>
+                                    <b>[{data?.dynamicText}]</b>
                                 </p>
                                 <input
                                     type="text"
-                                    name={`${data}`}
-                                    value={""}
+                                    name={`${data?.dynamicTextValue}`}
+                                    value={`${data?.dynamicTextValue}`}
                                     // onChange={handleChange}
-                                    placeholder={`${data} text`}
+                                    placeholder={`text`}
                                     // onMouseEnter={() => setTranslation(true)}
                                     // onClick={() => setTranslation(true)}
                                 />
@@ -178,9 +180,7 @@ export default function Texts({ texts }: Props) {
                         </button>
                     </>
                 </div>
-                <div className="notification-center">
-                    <div className="noty-box"></div>
-                </div>
+              
             </div>
         </>
     );
