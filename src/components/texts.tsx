@@ -6,9 +6,10 @@ import Modal from "./Modal";
 
 type Props = {
     texts: string;
+    setStepLevel?: (text: string) => void;
 };
 
-export default function Texts({ texts }: Props) {
+export default function Texts({ texts, setStepLevel }: Props) {
     const [currentId, setCurrentId] = useState<number>(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -41,7 +42,9 @@ export default function Texts({ texts }: Props) {
         const indexOneText = storedTextArray[0];
         setCurrentId(indexOneText?.id);
         setCurrentText(indexOneText);
-        console.log('data deleted')
+        if(storedTextArray.length < 1) {
+            setStepLevel?.('form')
+        }
 
     }, [texts, textArray.length]);
 

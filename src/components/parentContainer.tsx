@@ -9,7 +9,7 @@ import {  NotificationProvider } from './Notifications';
 import ComponentTest from './TextComponent';
 export default function ParentContainer() {
     const [text, setText] = useState<string>("");
-    const [step, setStep] = useState<number | string>("viewTexts");
+    const [step, setStep] = useState<number | string>("form");
     // const [step, setStep] = useState<number | string>("form");
     const [textArray, setTextArray] = useState<
         { text: string; time: string; id: number }[]
@@ -24,7 +24,13 @@ export default function ParentContainer() {
         const storedTextArray = JSON.parse(
             localStorage.getItem("textArray") || "[]"
         );
+        console.log(storedTextArray)
         setTextArray(storedTextArray);
+        if(storedTextArray.length === 0) {
+            setStep("welcome")
+        } else {
+            setStep("viewTexts")
+        }
     }, []);
 
     const formattedTime: string = getCurrentTimeAndDate("time");
@@ -52,21 +58,22 @@ export default function ParentContainer() {
             </div>
             <div>
                 {
-                textArray.length < 1 && step === "welcome" &&  (
+                textArray && step === "welcome" &&  (
                     <WelcomeView 
                     setStepLevel={setStepLevel}
                     />
                 )
                }
-
-                {(textArray.length > 0 && step === "viewTexts")  && <Texts texts={text} />}
-
-                {(step === "form") && (
+ {(step === "form") && (
                     <SaveTexts
                         saveUserText={saveUserText}
                         setStepLevel={setStepLevel}
                     />
                 )}
+               
+                {(textArray.length > 0 || step === "viewTexts") 
+                 && <Texts texts={text} setStepLevel={setStepLevel} />}
+
                
             </div>
         </>
