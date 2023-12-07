@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { sortArrayByRecent } from "./../helper";
+import Modal from "./Modal";
 
 type Props = {
     texts: string;
@@ -9,16 +10,20 @@ type Props = {
 
 export default function Texts({ texts }: Props) {
     const [currentId, setCurrentId] = useState<number>(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const [currentText, setCurrentText] = useState<{
         text: string;
         time: string;
         id: number;
         active: boolean;
         header: string;
-        dynamicWordsForText: [{
-            dynamicText:string,
-            dynamicTextValue: string
-        }];
+        dynamicWordsForText: [
+            {
+                dynamicText: string;
+                dynamicTextValue: string;
+            }
+        ];
         dynamicWordsForHeading: string[];
     }>();
     const [textArray, setTextArray] = useState<
@@ -36,7 +41,9 @@ export default function Texts({ texts }: Props) {
         const indexOneText = storedTextArray[0];
         setCurrentId(indexOneText?.id);
         setCurrentText(indexOneText);
-    }, [texts]);
+        console.log('data deleted')
+
+    }, [texts, textArray.length]);
 
     const scrollToDiv = (index: number) => {
         if (divRefs.current[index]) {
@@ -46,13 +53,35 @@ export default function Texts({ texts }: Props) {
 
     const copyToClipboard = async () => {
         try {
-            currentText?.text && await navigator.clipboard.writeText(currentText?.text);
-        //   setIsCopied(true);
+            currentText?.text &&
+                (await navigator.clipboard.writeText(currentText?.text));
+            //   setIsCopied(true);
         } catch (err) {
-          console.error('Unable to copy to clipboard', err);
+            console.error("Unable to copy to clipboard", err);
         }
-      };
+    };
+    //   const handleClick = ()=> {
+    //     addSuccess('This is a success message');
 
+    //   }
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+    const deleteText = () => {
+        const storedTextArray = JSON.parse(
+            localStorage.getItem("textArray") || "[]"
+        );
+        const data = storedTextArray.filter((text: any) => {
+            return text.id !== currentText?.id;
+        });
+        localStorage.setItem("textArray", JSON.stringify(data));
+        setTextArray([...data]);
+    };
     return (
         <>
             <div className="preview-cover">
@@ -91,11 +120,7 @@ export default function Texts({ texts }: Props) {
                                             }}
                                         >
                                             <div>
-                                                <h3>
-                                                    {" "}
-                                                    {data.header
-                                                       }
-                                                </h3>
+                                                <h3> {data.header}</h3>
 
                                                 <p
                                                     style={{
@@ -121,7 +146,7 @@ export default function Texts({ texts }: Props) {
                     <p className="time-block">{currentText?.time}</p>
 
                     <div className="action-div">
-                    <div className="action">
+                        <div className="action">
                             <span className="material-symbols-outlined">
                                 chat_add_on
                             </span>
@@ -132,13 +157,18 @@ export default function Texts({ texts }: Props) {
                                 copy_all
                             </span>
                         </div>
-                        <div className="action">
+                        <div
+                            className="action"
+                            onClick={() => {
+                                openModal();
+                            }}
+                        >
                             {/* <span>copy text </span> */}
                             <span className="material-symbols-outlined">
                                 delete
                             </span>
                         </div>
-                        
+
                         {/* <div className="action">
                             <span>copy text </span>
                             <span className="material-symbols-outlined">
@@ -159,28 +189,34 @@ export default function Texts({ texts }: Props) {
                             currentText?.dynamicWordsForText?.length > 0 && (
                                 <h3 className="mb-10">Dynamic Texts</h3>
                             )}
-                        {currentText?.dynamicWordsForText?.map((data) => (
-                            <div>
-                                <p>
-                                    <b>[{data?.dynamicText}]</b>
-                                </p>
-                                <input
-                                    type="text"
-                                    name={`${data?.dynamicTextValue}`}
-                                    value={`${data?.dynamicTextValue}`}
-                                    // onChange={handleChange}
-                                    placeholder={`text`}
-                                    // onMouseEnter={() => setTranslation(true)}
-                                    // onClick={() => setTranslation(true)}
-                                />
-                            </div>
-                        ))}
-                        <button className="update-text">
-                            Update text
-                        </button>
+                        {currentText?.dynamicWordsForText?.map(
+                            (data, index) => (
+                                <div key={index}>
+                                    <p>
+                                        <b>[{data?.dynamicText}]</b>
+                                    </p>
+                                    <input
+                                        type="text"
+                                        name={`${data?.dynamicTextValue}`}
+                                        // value={`${data?.dynamicTextValue}`}
+                                        // onChange={handleChange}
+                                        placeholder={`text`}
+                                        // onMouseEnter={() => setTranslation(true)}
+                                        // onClick={() => setTranslation(true)}
+                                    />
+                                </div>
+                            )
+                        )}
+                        <button className="update-text">Update text</button>
                     </>
                 </div>
-              
+                <Modal
+                    isOpen={isModalOpen}
+                    onClose={closeModal}
+                    onYes={deleteText}
+                >
+                    <p>Are you sure you want to delete this text?</p>
+                </Modal>
             </div>
         </>
     );

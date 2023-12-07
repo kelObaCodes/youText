@@ -405,3 +405,125 @@ cursor: pointer;
   min-height: 200px;
   bottom: 123px;
 }
+
+
+.notification-cover {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  left: 80%;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.notification {
+  color: #000;
+  border-radius: 10px;
+  font-size: 14px;
+  width: 250px;
+  left: 83%;
+  margin-right: 30px;
+  animation: fadeIn 0.5s ease-in-out;
+  margin-bottom: 60px;
+}
+.notification-header {
+  padding: 10px;
+}
+.notification-message {
+  padding: 10px;
+  min-height: 40px;
+  border-bottom: 1px solid #3C6255;
+}
+.notification-success {
+  background-color: #fff;
+}
+
+.success-header{
+  min-height: 10px;
+  border-bottom: 1px solid #3C6255;
+}
+
+.remove-notification {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  margin-left: auto;
+  color: #00425A;
+  padding: 10px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Add your own styles or adjust these as needed */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 5;
+  padding-top: 50px;
+}
+
+.modal {
+  background: #fff;
+  min-height: 150px;
+  max-width: 400px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+}
+
+.modal-body {
+  /* Add additional styling for the modal body */
+}
+
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.yes-button,
+.no-button {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.no-button {
+  background-color: #f44336;
+}

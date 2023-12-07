@@ -41,7 +41,7 @@ export function NotificationList({ children }) {
     <div className='notification-cover'>
       {notifications.map((notification, index) => (
         <div
-          key={index}
+          key={notification.type+index}
           className={`notification notification-${notification.type}`}
         >
             <div className={`notification-header ${notification.type}-header`}>{notification.type}</div>

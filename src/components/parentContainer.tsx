@@ -5,7 +5,8 @@ import Texts from "./texts";
 import SaveTexts from "./saveTexts";
 import WelcomeView from "./welcome";
 import { getCurrentTimeAndDate } from "./../helper";
-
+import {  NotificationProvider } from './Notifications';
+import ComponentTest from './TextComponent';
 export default function ParentContainer() {
     const [text, setText] = useState<string>("");
     const [step, setStep] = useState<number | string>("viewTexts");
@@ -30,7 +31,11 @@ export default function ParentContainer() {
 
     return (
         <>
-       
+           <NotificationProvider>
+
+<ComponentTest/>
+
+    </NotificationProvider>
             <div>
                 
                 {(step === "viewTexts") && (
