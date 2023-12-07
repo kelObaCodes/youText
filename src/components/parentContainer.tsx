@@ -24,7 +24,6 @@ export default function ParentContainer() {
         const storedTextArray = JSON.parse(
             localStorage.getItem("textArray") || "[]"
         );
-        console.log(storedTextArray)
         setTextArray(storedTextArray);
         if(storedTextArray.length === 0) {
             setStep("welcome")
