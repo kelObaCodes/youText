@@ -43,12 +43,7 @@ export default function ParentContainer() {
     </NotificationProvider>
             <div>
                 
-                {(step === "viewTexts") && (
-                        <button className="add-you-text"
-                        onClick={()=> setStep('form')}
-                        >add youText</button>
-                    )
-                }
+            
                 <p className="time-tag">{formattedTime}</p>
                 <span className="material-symbols-sharp time-icon">timer</span>
                 <span className="material-symbols-sharp image-bg">

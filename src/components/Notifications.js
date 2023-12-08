@@ -34,7 +34,7 @@ export function useNotification() {
   return context;
 }
 
-export function NotificationList({ children }) {
+export function NotificationList() {
   const { notifications, removeNotification } = useNotification();
 
   return (

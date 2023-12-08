@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { sortArrayByRecent } from "./../helper";
-import Modal from "./Modal";
+import Modal from "./Modal";import { NotificationList, useNotificationAdd } from "./Notifications";
 
 type Props = {
     texts: string;
@@ -12,7 +12,7 @@ type Props = {
 export default function Texts({ texts, setStepLevel }: Props) {
     const [currentId, setCurrentId] = useState<number>(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const { addSuccess } = useNotificationAdd();
     const [currentText, setCurrentText] = useState<{
         text: string;
         time: string;
@@ -63,10 +63,6 @@ export default function Texts({ texts, setStepLevel }: Props) {
             console.error("Unable to copy to clipboard", err);
         }
     };
-    //   const handleClick = ()=> {
-    //     addSuccess('This is a success message');
-
-    //   }
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -84,9 +80,13 @@ export default function Texts({ texts, setStepLevel }: Props) {
         });
         localStorage.setItem("textArray", JSON.stringify(data));
         setTextArray([...data]);
+        addSuccess("You text deleted successfully");
     };
     return (
         <>
+                        <button className="add-you-text"
+                        onClick={()=> setStepLevel?.('form')}
+                        >add youText</button>
             <div className="preview-cover">
                 <div className="texts-cover">
                     <div className="stroke-line-lead"></div>
@@ -220,6 +220,7 @@ export default function Texts({ texts, setStepLevel }: Props) {
                 >
                     <p>Are you sure you want to delete this text?</p>
                 </Modal>
+                <NotificationList />
             </div>
         </>
     );
