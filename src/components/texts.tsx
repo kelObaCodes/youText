@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { sortArrayByRecent } from "./../helper";
-import Modal from "./Modal";import { NotificationList, useNotificationAdd } from "./Notifications";
+import Modal from "./Modal";
+import { NotificationList, useNotificationAdd } from "./Notifications";
 
 type Props = {
     texts: string;
@@ -42,10 +43,9 @@ export default function Texts({ texts, setStepLevel }: Props) {
         const indexOneText = storedTextArray[0];
         setCurrentId(indexOneText?.id);
         setCurrentText(indexOneText);
-        if(storedTextArray.length < 1) {
-            setStepLevel?.('form')
+        if (storedTextArray.length < 1) {
+            setStepLevel?.("form");
         }
-
     }, [texts, textArray.length]);
 
     const scrollToDiv = (index: number) => {
@@ -82,11 +82,18 @@ export default function Texts({ texts, setStepLevel }: Props) {
         setTextArray([...data]);
         addSuccess("You text deleted successfully");
     };
+
+    const updateText = ()=> {
+        const isAnyDynamicTextValueEmpty = currentText?.dynamicWordsForText?.some(item => item.dynamicTextValue === '');
+    }
     return (
-        <>
-                        <button className="add-you-text"
-                        onClick={()=> setStepLevel?.('form')}
-                        >add youText</button>
+        <div>
+            <button
+                className="add-you-text"
+                onClick={() => setStepLevel?.("form")}
+            >
+                add youText
+            </button>
             <div className="preview-cover">
                 <div className="texts-cover">
                     <div className="stroke-line-lead"></div>
@@ -96,9 +103,7 @@ export default function Texts({ texts, setStepLevel }: Props) {
                                 <div key={data.id}>
                                     <div
                                         className="scroll-element"
-                                        ref={(element) =>
-                                            (divRefs.current[index] = element)
-                                        }
+                                       
                                     ></div>
                                     <div
                                         key={data.id}
@@ -106,7 +111,11 @@ export default function Texts({ texts, setStepLevel }: Props) {
                                             scrollToDiv(index);
                                         }}
                                     >
-                                        <div className="relative-pos">
+                                        <div className="relative-pos"
+                                         ref={(element) =>
+                                            (divRefs.current[index] = element)
+                                        }
+                                        >
                                             <p className="text-time">
                                                 {data.time}
                                             </p>
@@ -210,7 +219,9 @@ export default function Texts({ texts, setStepLevel }: Props) {
                                 </div>
                             )
                         )}
-                        <button className="update-text">Update text</button>
+                        <button className="update-text" 
+                        onClick={()=> updateText()}
+                        >Update text</button>
                     </>
                 </div>
                 <Modal
@@ -222,6 +233,6 @@ export default function Texts({ texts, setStepLevel }: Props) {
                 </Modal>
                 <NotificationList />
             </div>
-        </>
+        </div>
     );
 }

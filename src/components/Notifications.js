@@ -38,13 +38,14 @@ export function NotificationList() {
   const { notifications, removeNotification } = useNotification();
 
   return (
+    <>
     <div className='notification-cover'>
       {notifications.map((notification, index) => (
         <div
           key={notification.type+index}
           className={`notification notification-${notification.type}`}
         >
-            <div className={`notification-header ${notification.type}-header`}>{notification.type}</div>
+            {/* <div className={`notification-header ${notification.type}-header`}>{notification.type}</div> */}
           <div className="notification-message">{notification.message}</div>
           <button className="remove-notification" onClick={() => removeNotification(index)}>
             Okay
@@ -52,6 +53,8 @@ export function NotificationList() {
         </div>
       ))}
     </div>
+    </>
+
   );
 }
 

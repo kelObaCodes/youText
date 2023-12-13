@@ -65,6 +65,9 @@ export default function SaveTexts({ saveUserText, setStepLevel }: Props) {
     }, []);
 
     const handleAddText = () => {
+        if(!text || !textHeading) {
+            return 
+        }
         const currentTime = getCurrentTimeAndDate("both");
         const dynamicWords = extractWordsInBrackets(text);
         const dynamicHeader = extractWordsInBrackets(textHeading);

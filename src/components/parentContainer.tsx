@@ -7,6 +7,7 @@ import WelcomeView from "./welcome";
 import { getCurrentTimeAndDate } from "./../helper";
 import {  NotificationProvider } from './Notifications';
 import ComponentTest from './TextComponent';
+
 export default function ParentContainer() {
     const [text, setText] = useState<string>("");
     const [step, setStep] = useState<number | string>("form");
@@ -52,7 +53,7 @@ export default function ParentContainer() {
             </div>
             <div>
                 {
-                textArray && step === "welcome" &&  (
+              step === "welcome" &&  (
                     <WelcomeView 
                     setStepLevel={setStepLevel}
                     />
@@ -65,11 +66,12 @@ export default function ParentContainer() {
                     />
                 )}
                
-                {(textArray.length > 0 || step === "viewTexts") 
+                {step === "viewTexts"
                  && <Texts texts={text} setStepLevel={setStepLevel} />}
 
                
             </div>
+
         </>
     );
 }
