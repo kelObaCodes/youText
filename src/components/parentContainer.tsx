@@ -1,8 +1,7 @@
-"use client";
 
 import { useState, useEffect, ChangeEvent, useRef } from "react";
-import Texts from "./texts";
-import SaveTexts from "./saveTexts";
+import Texts from "./Texts";
+import SaveTexts from "./SaveTexts";
 import WelcomeView from "./welcome";
 import { getCurrentTimeAndDate } from "./../helper";
 import {  NotificationProvider } from './Notifications';

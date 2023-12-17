@@ -1,4 +1,3 @@
-"use client";
 
 import { useState, useEffect, ChangeEvent, useRef } from "react";
 import ToolTip from "./tooltip";
@@ -6,7 +5,7 @@ import {
     youTextDataExplainer,
     getCurrentTimeAndDate,
     extractWordsInBrackets,
-} from "./../helper";
+} from "../helper";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import Image from "next/image";
 import emojiPic from "../images/emoji.png";
@@ -76,6 +75,7 @@ export default function SaveTexts({ saveUserText, setStepLevel }: Props) {
             {
                 text: text,
                 time: currentTime,
+                updatedText:'',
                 id: Math.random(),
                 header: textHeading,
                 dynamicWordsForText: [...dynamicWords],

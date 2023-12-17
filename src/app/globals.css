@@ -317,14 +317,14 @@ margin: 5px 0 20px 0;
 
 .text-time {
   position: absolute;
-  left: 12px;
+  left: 11px;
   font-size: 12px;
   opacity: .7;
   background: white;
   bottom: 8px;
   padding: 2px;
   box-shadow: 0 1px 2px 0 #0000001a;
-  width: 130px;
+  width: 132px;
   text-align: center;
 }
 
@@ -417,7 +417,7 @@ cursor: pointer;
   flex-direction: column;
   left: 80%;
   justify-content: flex-end;
-  height: 100%;
+  bottom: -10px;
 }
 
 .notification {
