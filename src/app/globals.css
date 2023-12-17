@@ -429,6 +429,9 @@ cursor: pointer;
   margin-right: 30px;
   animation: fadeIn 0.5s ease-in-out;
   margin-bottom: 60px;
+  animation: bounce-up 2s ease-in-out both;
+  opacity: 1;
+  animation-fill-mode: forwards;
 }
 .notification-header {
   padding: 10px;

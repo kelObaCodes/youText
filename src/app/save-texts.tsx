@@ -3,7 +3,7 @@ import styles from "./page.module.css";
 import ParentContainer from "@/components/ParentContainer";
 import {  NotificationProvider } from '@/components/Notifications';
 
-export default function Home() {
+export default function SaveTexts() {
     return (
         <NotificationProvider>
         <main className={styles.main}>

@@ -57,12 +57,9 @@ export default function Texts({ texts, setStepLevel }: Props) {
         const data = textArray.map((text: any) => {
             if (text.id === currentText?.id) {
                 text = currentText
-                text.updatedText = currentText?.updatedText
             }
             return text
         });
-        console.log(data, '')
-
         localStorage.setItem("textArray", JSON.stringify(data));
         setTextArray([...data]);
         addSuccess("Current text updated successfully");
@@ -270,7 +267,7 @@ export default function Texts({ texts, setStepLevel }: Props) {
                                     <input
                                         type="text"
                                         name={`${data?.dynamicText}`}
-                                        // value={`${data?.dynamicTextValue}`}
+                                        value={`${data?.dynamicTextValue}`}
                                         onChange={(e) => handleChange(e, index)}
                                         placeholder={`text`}
                                         // onMouseEnter={() => setTranslation(true)}

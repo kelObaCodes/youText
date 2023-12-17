@@ -1,11 +1,10 @@
-
 import { useState, useEffect, ChangeEvent, useRef } from "react";
 import Texts from "./Texts";
 import SaveTexts from "./SaveTexts";
 import WelcomeView from "./welcome";
 import { getCurrentTimeAndDate } from "./../helper";
-import {  NotificationProvider } from './Notifications';
-import ComponentTest from './TextComponent';
+import { NotificationProvider } from "./Notifications";
+import ComponentTest from "./TextComponent";
 
 export default function ParentContainer() {
     const [text, setText] = useState<string>("");
@@ -25,10 +24,10 @@ export default function ParentContainer() {
             localStorage.getItem("textArray") || "[]"
         );
         setTextArray(storedTextArray);
-        if(storedTextArray.length === 0) {
-            setStep("welcome")
+        if (storedTextArray.length === 0) {
+            setStep("welcome");
         } else {
-            setStep("viewTexts")
+            setStep("viewTexts");
         }
     }, []);
 
@@ -36,14 +35,10 @@ export default function ParentContainer() {
 
     return (
         <>
-           <NotificationProvider>
-
-<ComponentTest/>
-
-    </NotificationProvider>
+            <NotificationProvider>
+                <ComponentTest />
+            </NotificationProvider>
             <div>
-                
-            
                 <p className="time-tag">{formattedTime}</p>
                 <span className="material-symbols-sharp time-icon">timer</span>
                 <span className="material-symbols-sharp image-bg">
@@ -51,26 +46,20 @@ export default function ParentContainer() {
                 </span>
             </div>
             <div>
-                {
-              step === "welcome" &&  (
-                    <WelcomeView 
-                    setStepLevel={setStepLevel}
-                    />
-                )
-               }
- {(step === "form") && (
+                {step === "welcome" && (
+                    <WelcomeView setStepLevel={setStepLevel} />
+                )}
+                {step === "form" && (
                     <SaveTexts
                         saveUserText={saveUserText}
                         setStepLevel={setStepLevel}
                     />
                 )}
-               
-                {step === "viewTexts"
-                 && <Texts texts={text} setStepLevel={setStepLevel} />}
 
-               
+                {step === "viewTexts" && (
+                    <Texts texts={text} setStepLevel={setStepLevel} />
+                )}
             </div>
-
         </>
     );
 }
