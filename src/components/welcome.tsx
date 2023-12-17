@@ -1,24 +1,16 @@
 "use client";
 
-import Texts from "./texts";
-import SaveTexts from "./saveTexts";
-import { getCurrentTimeAndDate } from "./../helper";
 
-export default function WelcomeView() {
-    const formattedTime: string = getCurrentTimeAndDate("time");
+type Props = {
+    setStepLevel?: (text: string) => void;
+}
+
+export default function WelcomeView({setStepLevel}:Props) {
 
     return (
         <>
             <div className="welcome-cover">
-                <div>
-                    <p className="time-tag">{formattedTime}</p>
-                    <span className="material-symbols-sharp time-icon">
-                        timer
-                    </span>
-                    <span className="material-symbols-sharp image-bg">
-                        edit_off
-                    </span>
-                </div>
+           
 
                 <h1 className="welcome-header">
                     Hello{" "}
@@ -34,14 +26,13 @@ export default function WelcomeView() {
                     some parts to be customizable, dynamic and other parts
                     resusable, youText gives you that.
                 </p>
-                <button className="create-btn cursor-pointer">
+                <button className="create-btn cursor-pointer" onClick={()=>setStepLevel?.('form')}>
                     <span className="button-text">Create your text</span>
                     <span className="material-symbols-outlined symbol-icon">
                         edit
                     </span>
                 </button>
-                <SaveTexts />
-                <Texts />
+             
             </div>
         </>
     );
