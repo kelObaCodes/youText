@@ -10,9 +10,11 @@ import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import Image from "next/image";
 import emojiPic from "../images/emoji.png";
 import { useRouter } from 'next/navigation';
+import { NotificationList, useNotificationAdd } from "./Notifications";
 
 export default function SaveTexts() {
     const router = useRouter()
+    const { addSuccess } = useNotificationAdd();
 
     const [text, setText] = useState<string>("");
     const [textHeading, setTextHeading] = useState<string>("");
@@ -59,7 +61,9 @@ export default function SaveTexts() {
 
     const handleAddText = () => {
         if(!text || !textHeading) {
+            addSuccess("Please fill in heading and text fields");
             return 
+            
         }
         const currentTime = getCurrentTimeAndDate("both");
         const dynamicWords = extractWordsInBrackets(text);
@@ -156,7 +160,7 @@ export default function SaveTexts() {
                 >
                     { showEmoji && <EmojiPicker onEmojiClick={onClickEmoji} /> }
                 </div>
-
+                <NotificationList />
                 <button
                     className="create-btn cursor-pointer"
                     onClick={() => handleAddText()}>
