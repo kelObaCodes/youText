@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+"use client"
+import { useState, useEffect, ChangeEvent, useRef } from "react";
 import Texts from "./Texts";
 import SaveTexts from "./SaveTexts";
 import WelcomeView from "./Welcome";
-import { getCurrentTimeAndDate } from "../helper";
+import { getCurrentTimeAndDate } from "./../helper";
 import { NotificationProvider } from "./Notifications";
 import ComponentTest from "./TextComponent";
 

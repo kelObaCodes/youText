@@ -1,4 +1,4 @@
-
+"use client"
 type Props = {
     setStepLevel?: (text: string) => void;
 }
