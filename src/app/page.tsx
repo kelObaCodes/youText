@@ -1,4 +1,3 @@
-"use client";
 import styles from "./page.module.css";
 import ParentContainer from "../components/ParentContainer";
 import {  NotificationProvider } from '../components/Notifications';
