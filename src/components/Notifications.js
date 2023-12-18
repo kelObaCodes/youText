@@ -1,16 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const NotificationContext = React.createContext();
 
 export function NotificationProvider({ children }) {
   const [notifications, setNotifications] = useState([]);
 
+  useEffect(() => {
+    // Check if there are notifications
+    if (notifications.length > 0) {
+      // Set a timeout for the first notification
+      const timeoutId = setTimeout(() => {
+        // Trigger the slideOut animation and remove the first notification after 0.5 seconds
+        setNotifications(prevNotifications =>
+          prevNotifications.map((notification, index) => {
+            return index === 0 ? { ...notification, slideOut: true } : notification;
+          })
+        );
+
+        // Remove the first notification from the state after 0.5 seconds
+        setTimeout(() => {
+          removeNotification(0);
+        }, 500);
+      }, 5000);
+
+      // Clear the timeout when the component unmounts or when notifications change
+      return () => clearTimeout(timeoutId);
+    }
+  }, [notifications]);
+
   function addNotification(type, message) {
-    setNotifications([...notifications, { type, message }]);
+    const newNotification = { type, message, slideOut: false };
+    setNotifications(prevNotifications => [...prevNotifications, newNotification]);
   }
 
   function removeNotification(index) {
-    setNotifications(notifications.filter((_, i) => i !== index));
+    setNotifications(prevNotifications =>
+      prevNotifications.filter((_, i) => i !== index)
+    );
   }
 
   return (
@@ -18,7 +44,7 @@ export function NotificationProvider({ children }) {
       value={{
         notifications,
         addNotification,
-        removeNotification
+        removeNotification,
       }}
     >
       {children}
@@ -39,22 +65,22 @@ export function NotificationList() {
 
   return (
     <>
-    <div className='notification-cover'>
-      {notifications.map((notification, index) => (
-        <div
-          key={notification.type+index}
-          className={`notification notification-${notification.type}`}
-        >
-            {/* <div className={`notification-header ${notification.type}-header`}>{notification.type}</div> */}
-          <div className="notification-message">{notification.message}</div>
-          <button className="remove-notification" onClick={() => removeNotification(index)}>
-            Okay
-          </button>
-        </div>
-      ))}
-    </div>
+      <div className='notification-cover'>
+        {notifications.map((notification, index) => (
+          <div
+            key={notification.type + index}
+            className={`notification notification-${notification.type} animated ${
+              notification.slideOut ? 'slideOut' : 'slideIn'
+            }`}
+          >
+            <div className="notification-message">{notification.message}</div>
+            <button className="remove-notification" onClick={() => removeNotification(index)}>
+              Okay
+            </button>
+          </div>
+        ))}
+      </div>
     </>
-
   );
 }
 
@@ -64,6 +90,6 @@ export function useNotificationAdd() {
   return {
     addSuccess: message => addNotification('success', message),
     addWarning: message => addNotification('warning', message),
-    addError: message => addNotification('error', message)
+    addError: message => addNotification('error', message),
   };
 }
