@@ -1,9 +1,16 @@
-"use client"
+"use client";
+
+import { useRouter } from 'next/navigation';
 type Props = {
     setStepLevel?: (text: string) => void;
 }
 
 export default function WelcomeView({setStepLevel}:Props) {
+    const router = useRouter()
+
+const gotoSaveTexts = ()=> {
+    router.push('/save')
+}
 
     return (
         <>
@@ -24,7 +31,7 @@ export default function WelcomeView({setStepLevel}:Props) {
                     some parts to be customizable, dynamic and other parts
                     resusable, youText gives you that.
                 </p>
-                <button className="create-btn cursor-pointer" onClick={()=>setStepLevel?.('form')}>
+                <button className="create-btn cursor-pointer" onClick={()=>gotoSaveTexts()}>
                     <span className="button-text">Create your text</span>
                     <span className="material-symbols-outlined symbol-icon">
                         edit

@@ -3,9 +3,10 @@ import { useState, useEffect, useRef, ChangeEvent } from "react";
 import { sortArrayByRecent } from "../helper";
 import Modal from "./Modal";
 import { NotificationList, useNotificationAdd } from "./Notifications";
+import { useRouter } from 'next/navigation';
 
 type Props = {
-    texts: string;
+    texts?: string;
     setStepLevel?: (text: string) => void;
 };
 
@@ -14,7 +15,8 @@ export default function Texts({ texts, setStepLevel }: Props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isTextUpdated, setIsTextUpdated] = useState(false);
     const { addSuccess } = useNotificationAdd();
-    
+     const router = useRouter()
+     
     const [currentText, setCurrentText] = useState<{
         text: string;
         time: string;
@@ -62,6 +64,7 @@ export default function Texts({ texts, setStepLevel }: Props) {
         localStorage.setItem("textArray", JSON.stringify(data));
         setTextArray([...data]);
         addSuccess("Current text updated successfully");
+        setIsTextUpdated(false)
     }
 
     },[isTextUpdated])
@@ -87,7 +90,7 @@ export default function Texts({ texts, setStepLevel }: Props) {
 
     const scrollToDiv = (index: number) => {
         if (divRefs.current[index]) {
-            divRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
+            // divRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
         }
     };
 
@@ -146,7 +149,7 @@ export default function Texts({ texts, setStepLevel }: Props) {
         <div>
             <button
                 className="add-you-text"
-                onClick={() => setStepLevel?.("form")}
+                onClick={() => router.push("/save")}
             >
                 add youText
             </button>
@@ -251,12 +254,14 @@ export default function Texts({ texts, setStepLevel }: Props) {
                         </div> */}
                     </div>
                 </div>
+                {currentText?.dynamicWordsForText &&
+                            currentText?.dynamicWordsForText?.length > 0 && (
                 <div className="dynamic-content">
                     <>
-                        {currentText?.dynamicWordsForText &&
+                        {/* {currentText?.dynamicWordsForText &&
                             currentText?.dynamicWordsForText?.length > 0 && (
                                 <h3 className="mb-10">Dynamic Texts</h3>
-                            )}
+                            )} */}
                         {currentText?.dynamicWordsForText?.map(
                             (data, index) => (
                                 <div key={index}>
@@ -280,6 +285,8 @@ export default function Texts({ texts, setStepLevel }: Props) {
                         >Update text</button>
                     </>
                 </div>
+                            )} 
+
                 <Modal
                     isOpen={isModalOpen}
                     onClose={closeModal}

@@ -1,4 +1,4 @@
-
+"use client"
 import { useState, useEffect, ChangeEvent, useRef } from "react";
 import ToolTip from "./tooltip";
 import {
@@ -9,13 +9,11 @@ import {
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import Image from "next/image";
 import emojiPic from "../images/emoji.png";
+import { useRouter } from 'next/navigation';
 
-type Props = {
-    saveUserText?: (user: string) => void;
-    setStepLevel?: (text: string) => void;
-};
+export default function SaveTexts() {
+    const router = useRouter()
 
-export default function SaveTexts({ saveUserText, setStepLevel }: Props) {
     const [text, setText] = useState<string>("");
     const [textHeading, setTextHeading] = useState<string>("");
     const [translation, setTranslation] = useState<boolean>(false);
@@ -23,7 +21,6 @@ export default function SaveTexts({ saveUserText, setStepLevel }: Props) {
     const [textArray, setTextArray] = useState<
         { text: string; time: string; id: number; header: string }[]
     >([]);
-
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     const handleChange = (
@@ -52,9 +49,6 @@ export default function SaveTexts({ saveUserText, setStepLevel }: Props) {
         }
     };
 
-    useEffect(() => {
-        saveUserText?.(text);
-    }, [text]);
 
     useEffect(() => {
         const storedTextArray = JSON.parse(
@@ -88,7 +82,7 @@ export default function SaveTexts({ saveUserText, setStepLevel }: Props) {
 
         setText("");
         setTextHeading("");
-        setStepLevel?.("viewTexts");
+        router.push('/texts')
     };
 
     return (
@@ -97,9 +91,7 @@ export default function SaveTexts({ saveUserText, setStepLevel }: Props) {
                 className="welcome-cover"
                 onMouseEnter={() => setTranslation(true)}
             >
-                 {/* <div className="notification-center">
-                    <div className="noty-box"></div>
-                </div> */}
+              
                 {<ToolTip toolTipData={youTextDataExplainer()} />}
 
                 <div className="text-area-div">
