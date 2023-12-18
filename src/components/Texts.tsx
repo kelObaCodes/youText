@@ -1,4 +1,6 @@
 
+"use client"
+
 import { useState, useEffect, useRef, ChangeEvent } from "react";
 import { sortArrayByRecent } from "../helper";
 import Modal from "./Modal";

@@ -1,4 +1,5 @@
-// ThemeProvider.js
+"use client"
+
 import React, { useState } from 'react';
 import TextContext from './TextContext';
 
