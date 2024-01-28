@@ -6,24 +6,26 @@ import { sortArrayByRecent } from "../helper";
 import Modal from "./Modal";
 import { NotificationList, useNotificationAdd } from "./Notifications";
 import { useRouter } from 'next/navigation';
+import axios from '../http/index'
+import { useSearchParams, usePathname } from 'next/navigation'
 
 type Props = {
     texts?: string;
-    setStepLevel?: (text: string) => void;
+    params?: string
 };
 
-export default function Texts({ texts, setStepLevel }: Props) {
-    const [currentId, setCurrentId] = useState<number>(0);
+export default function Texts({ texts, params }: Props, ) {
+    const [currentId, setCurrentId] = useState<string>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isTextUpdated, setIsTextUpdated] = useState(false);
     const { addSuccess } = useNotificationAdd();
      const router = useRouter()
-     
+    
     const [currentText, setCurrentText] = useState<{
         text: string;
         time: string;
         updatedText: string
-        id: number;
+        _id: string;
         active: boolean;
         header: string;
         dynamicWordsForText: [
@@ -32,40 +34,47 @@ export default function Texts({ texts, setStepLevel }: Props) {
                 dynamicTextValue: string;
             }
         ];
-        dynamicWordsForHeading: string[];
+        dynamicWordsForHeading: string;
     }>();
+
     const [textArray, setTextArray] = useState<
         { text: string; time: string; id: number; active: boolean }[]
     >([]);
+
     const divRefs = useRef<Array<HTMLDivElement | null>>(
         Array.from({ length: textArray?.length }, () => null)
     );
 
-    useEffect(() => {
-        const storedTextArray = JSON.parse(
-            localStorage.getItem("textArray") || "[]"
-        );
-        setTextArray(storedTextArray);
-        const indexOneText = storedTextArray[0];
-        setCurrentId(indexOneText?.id);
-        setCurrentText(indexOneText);
-        if (storedTextArray.length < 1) {
-            setStepLevel?.("form");
-        }
+    useEffect( () => {
+        axios.get('/texts').then(({data})=> {
+            // const indexOneText = data[0];
+            setTextArray(sortArrayByRecent(data));
+            // setCurrentText(data[0])
+            setCurrentId(params);
+        })
+
+        axios.get(`/texts/${params}`).then(({data})=>{
+
+            console.log(data)
+            setCurrentText(data)
+        })
+      
     }, [texts, textArray.length]);
 
     useEffect(()=> {
         if(isTextUpdated) {
-            localStorage.removeItem("textArray");
+           
         const data = textArray.map((text: any) => {
-            if (text.id === currentText?.id) {
+            if (text._id === currentText?._id) {
                 text = currentText
             }
             return text
         });
-        localStorage.setItem("textArray", JSON.stringify(data));
         setTextArray([...data]);
         addSuccess("Current text updated successfully");
+        axios.put(`/texts/${currentText?._id}/edit`, currentText).then((data)=>{
+console.log(currentText, 'current text')
+        })
         setIsTextUpdated(false)
     }
 
@@ -86,6 +95,7 @@ export default function Texts({ texts, setStepLevel }: Props) {
           ...prevCurrentText,
           updatedText: updatedText
         }));
+   
        
     setIsTextUpdated(true)
       };
@@ -115,13 +125,14 @@ export default function Texts({ texts, setStepLevel }: Props) {
         setIsModalOpen(false);
     };
     const deleteText = () => {
-        const storedTextArray = JSON.parse(
-            localStorage.getItem("textArray") || "[]"
-        );
-        const data = storedTextArray.filter((text: any) => {
-            return text.id !== currentText?.id;
+        console.log(currentText)
+       
+        const data = textArray.filter((text: any) => {
+            return text._id !== currentText?._id;
         });
-        localStorage.setItem("textArray", JSON.stringify(data));
+        axios.delete(`/texts/${currentText?._id}`).then((data)=>{
+            console.log(data)
+        })
         setTextArray([...data]);
         addSuccess("You text deleted successfully");
     };
@@ -147,13 +158,20 @@ export default function Texts({ texts, setStepLevel }: Props) {
             };
           });
       };
+      const switchLocale = (locale: string) =>{
+        // e.g. '/en/about' or '/fr/contact'
+        const newPath = `${locale}`
+        console.log(params)
+
+        window.history.replaceState(null, '', newPath)
+      }
     return (
         <div>
             <button
                 className="add-you-text"
                 onClick={() => router.push("/save")}
             >
-                add youText
+                add re-text
             </button>
             <div className="preview-cover">
                 <div className="texts-cover">
@@ -161,13 +179,13 @@ export default function Texts({ texts, setStepLevel }: Props) {
                     {textArray.length > 0 &&
                         sortArrayByRecent(textArray).map(
                             (data: any, index: number) => (
-                                <div key={data.id}>
+                                <div key={data._id}>
                                     <div
                                         className="scroll-element"
                                        
                                     ></div>
                                     <div
-                                        key={data.id}
+                                        key={data._id}
                                         onClick={() => {
                                             scrollToDiv(index);
                                         }}
@@ -183,13 +201,15 @@ export default function Texts({ texts, setStepLevel }: Props) {
                                         </div>
                                         <div
                                             className={`${"saved-texts"} ${
-                                                data.id === currentId
+                                                data._id === currentId
                                                     ? "active-text"
                                                     : ""
                                             }`}
                                             onClick={() => {
                                                 setCurrentText(data);
-                                                setCurrentId(data.id);
+                                                setCurrentId(data._id);
+                                                switchLocale(data._id)
+                                                // router.replace(`/texts/${data._id}`)
                                             }}
                                         >
                                             <div>
@@ -301,3 +321,4 @@ export default function Texts({ texts, setStepLevel }: Props) {
         </div>
     );
 }
+

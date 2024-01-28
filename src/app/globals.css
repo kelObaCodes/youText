@@ -515,11 +515,6 @@ cursor: pointer;
   color: #333;
 }
 
-.modal-body {
-  /* Add additional styling for the modal body */
-}
-
-
 .modal-footer {
   display: flex;
   justify-content: flex-end;

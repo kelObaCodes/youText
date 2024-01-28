@@ -1,6 +1,8 @@
 "use client"
 import { useState, useEffect, ChangeEvent, useRef } from "react";
 import ToolTip from "./tooltip";
+import axios from '../http/index'
+
 import {
     youTextDataExplainer,
     getCurrentTimeAndDate,
@@ -21,7 +23,7 @@ export default function SaveTexts() {
     const [translation, setTranslation] = useState<boolean>(false);
     const [showEmoji, setShowEmoji] = useState<boolean>(false);
     const [textArray, setTextArray] = useState<
-        { text: string; time: string; id: number; header: string }[]
+        { text: string; time: string; header: string }[]
     >([]);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -69,24 +71,31 @@ export default function SaveTexts() {
         const dynamicWords = extractWordsInBrackets(text);
         const dynamicHeader = extractWordsInBrackets(textHeading);
 
-        const newArray = [
+        const newArray = 
             {
                 text: text,
                 time: currentTime,
                 updatedText:'',
-                id: Math.random(),
                 header: textHeading,
                 dynamicWordsForText: [...dynamicWords],
-                dynamicWordsForHeading: [...dynamicHeader],
-            },
-            ...textArray,
-        ];
-        setTextArray(newArray);
-        localStorage.setItem("textArray", JSON.stringify(newArray));
+                dynamicWordsForHeading:''
+            }
+    
+        // axios.post('/create/text', newArray).then(data => console.log(data))
+        axios.post('/create/text', newArray)
+    .then(response => {
+        console.log(response.data);
+        setTextArray([newArray]);
+        // localStorage.setItem("textArray", JSON.stringify(newArray));
 
         setText("");
         setTextHeading("");
-        router.push('/texts')
+        router.push(`/texts/${response.data.text._id}`)
+    })
+    .catch(error => {
+        console.error(error);
+    });
+       
     };
 
     return (

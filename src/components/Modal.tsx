@@ -39,7 +39,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onYes, onNo, children })
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-header">
-          <h3>Delete youText</h3>
+          <h3>Delete text</h3>
           <button className="close-button" onClick={onClose}>
           <span className="material-symbols-outlined">
 cancel
